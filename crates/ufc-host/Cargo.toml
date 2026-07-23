@@ -1,0 +1,16 @@
+[package]
+name = "ufc-host"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Plugin host and sandbox manager for Universal File Converter"
+
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+semver = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }

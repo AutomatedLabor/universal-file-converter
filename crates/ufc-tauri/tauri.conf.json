@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicbarker/tauri/refs/heads/v2/crates/tauri-cli/schema.json",
+  "productName": "Universal File Converter",
+  "version": "0.1.0",
+  "identifier": "com.ufc.app",
+  "build": {
+    "frontendDist": "./ui/dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "cd ui && npm run dev",
+    "beforeBuildCommand": "cd ui && npm run build"
+  },
+  "app": {
+    "title": "Universal File Converter",
+    "windows": [
+      {
+        "title": "Universal File Converter",
+        "width": 1000,
+        "height": 700,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "ui/static/icon.png"
+    ]
+  }
+}

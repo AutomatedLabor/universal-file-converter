@@ -1,0 +1,12 @@
+[package]
+name = "core-doc-rtf"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "RTF document decoder plugin"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+serde = { workspace = true }

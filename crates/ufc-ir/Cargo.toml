@@ -1,0 +1,12 @@
+[package]
+name = "ufc-ir"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Intermediate representations for Universal File Converter"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+semver = { workspace = true }
+chrono = { workspace = true }

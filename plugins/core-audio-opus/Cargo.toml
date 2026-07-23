@@ -1,0 +1,13 @@
+[package]
+name = "core-audio-opus"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Opus audio decoder plugin"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+serde = { workspace = true }
+symphonia = { workspace = true }

@@ -1,0 +1,16 @@
+[package]
+name = "core-doc-html"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "HTML document decoder/encoder plugin"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+scraper = { workspace = true }
+html2text = { workspace = true }
+pulldown-cmark = { workspace = true }

@@ -1,0 +1,13 @@
+[package]
+name = "core-image-avif"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "AVIF image decoder/encoder plugin"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+serde = { workspace = true }
+image = { workspace = true }

@@ -1,0 +1,132 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/ufc-plugin-api",
+    "crates/ufc-ir",
+    "crates/ufc-core",
+    "crates/ufc-host",
+    "crates/ufc-cli",
+    "crates/ufc-tauri",
+    # Image plugins
+    "plugins/core-image-png",
+    "plugins/core-image-jpeg",
+    "plugins/core-image-webp",
+    "plugins/core-image-bmp",
+    "plugins/core-image-tiff",
+    "plugins/core-image-gif",
+    "plugins/core-image-avif",
+    "plugins/core-image-ico",
+    # Document plugins
+    "plugins/core-doc-pdf",
+    "plugins/core-doc-docx",
+    "plugins/core-doc-html",
+    "plugins/core-doc-markdown",
+    "plugins/core-doc-rtf",
+    # Audio plugins
+    "plugins/core-audio-wav",
+    "plugins/core-audio-flac",
+    "plugins/core-audio-mp3",
+    "plugins/core-audio-aac",
+    "plugins/core-audio-vorbis",
+    "plugins/core-audio-opus",
+    # Video plugins
+    "plugins/core-video-ffmpeg",
+    # Archive plugins
+    "plugins/core-archive-zip",
+    "plugins/core-archive-tar",
+    "plugins/core-archive-7z",
+    # Structured data plugins
+    "plugins/core-struct-csv",
+    "plugins/core-struct-json",
+    "plugins/core-struct-xml",
+    "plugins/core-struct-yaml",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+rust-version = "1.75"
+
+[workspace.dependencies]
+# Core
+ufc-plugin-api = { path = "crates/ufc-plugin-api" }
+ufc-ir = { path = "crates/ufc-ir" }
+ufc-core = { path = "crates/ufc-core" }
+ufc-host = { path = "crates/ufc-host" }
+
+# Async
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["rt", "codec"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+semver = { version = "1", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Hashing
+blake3 = "1"
+sha2 = "0.10"
+
+# UUID
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# CLI
+clap = { version = "4", features = ["derive", "env"] }
+indicatif = "0.17"
+colored = "2"
+
+# Image processing
+image = "0.25"
+imageproc = "0.25"
+
+# Audio
+symphonia = { version = "0.5", features = ["mp3", "aac", "flac", "wav", "ogg", "isomp4", "pcm"] }
+
+# PDF
+lopdf = "0.34"
+printpdf = "0.7"
+
+# DOCX
+docx-rs = "0.4"
+
+# HTML
+scraper = "0.21"
+html2text = "0.13"
+
+# Markdown
+pulldown-cmark = "0.12"
+
+# Archives
+zip = "2"
+tar = "0.4"
+flate2 = "1"
+sevenz-rust = "0.6"
+
+# Structured data
+csv = "1"
+quick-xml = "0.37"
+serde_yaml = "0.9"
+
+# Config
+directories = "5"
+
+# WASM
+wasmtime = { version = "25", features = ["component-model"] }
+
+# Misc
+num_cpus = "1"
+walkdir = "2"
+rayon = "1"
+tempfile = "3"
+glob = "0.3"

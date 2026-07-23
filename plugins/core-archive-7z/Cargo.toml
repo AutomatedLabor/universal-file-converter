@@ -1,0 +1,13 @@
+[package]
+name = "core-archive-7z"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "7-Zip archive decoder plugin"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+serde = { workspace = true }
+sevenz-rust = { workspace = true }

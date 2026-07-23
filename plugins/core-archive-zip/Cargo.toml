@@ -1,0 +1,13 @@
+[package]
+name = "core-archive-zip"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "ZIP archive decoder/encoder plugin"
+[lib]
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+ufc-plugin-api = { workspace = true }
+ufc-ir = { workspace = true }
+serde = { workspace = true }
+zip = { workspace = true }
