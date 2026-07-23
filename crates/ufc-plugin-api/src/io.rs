@@ -1,12 +1,16 @@
 use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
 
+/// Trait combining Read + Seek + Send for sandboxed file reading.
+pub trait ReadSeek: Read + Seek + Send {}
+impl<T: Read + Seek + Send> ReadSeek for T {}
+
 /// Sandboxed file reader provided to plugins by the host.
 ///
 /// Plugins never get direct filesystem access. Instead, the host provides
 /// a `FileReader` that wraps the input file with resource tracking.
 pub struct FileReader {
-    inner: Box<dyn Read + Seek + Send>,
+    inner: Box<dyn ReadSeek>,
     path: PathBuf,
     size: u64,
     position: u64,
@@ -15,7 +19,7 @@ pub struct FileReader {
 impl FileReader {
     /// Create a new FileReader (called by the host, not by plugins).
     pub fn new(
-        reader: Box<dyn Read + Seek + Send>,
+        reader: Box<dyn ReadSeek>,
         path: PathBuf,
         size: u64,
     ) -> Self {
