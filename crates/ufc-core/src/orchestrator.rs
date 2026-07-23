@@ -97,7 +97,7 @@ impl Orchestrator {
         output: PathBuf,
         target_mime: &str,
     ) -> Result<uuid::Uuid, CoreError> {
-        let mut item = QueueItem::new(input, output, target_mime.to_string());
+        let item = QueueItem::new(input, output, target_mime.to_string());
         let id = item.id;
         self.queue.push(item);
         self.emit(OrchestratorEvent::ItemQueued { item_id: id });
@@ -170,7 +170,7 @@ impl Orchestrator {
                         item.fail(error_msg.clone());
                         self.emit(OrchestratorEvent::Failed {
                             item_id,
-                            error: error_msg.clone,
+                            error: error_msg.clone(),
                         });
                         self.state.add_history(HistoryEntry {
                             input_path,
@@ -198,7 +198,7 @@ impl Orchestrator {
 
     /// Convert a single file.
     async fn convert_single(
-        &self,
+        &mut self,
         input: &Path,
         output: &Path,
         target_mime: &str,

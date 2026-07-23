@@ -26,3 +26,4 @@ rayon = { workspace = true }
 tempfile = { workspace = true }
 glob = { workspace = true }
 directories = { workspace = true }
+toml = { workspace = true }

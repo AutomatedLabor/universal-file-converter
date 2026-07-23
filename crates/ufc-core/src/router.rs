@@ -163,7 +163,7 @@ impl Default for ConversionRouter {
 }
 
 /// Determine the IR type based on source and target format categories.
-fn determine_ir_type(source: &FormatId, target: &FormatId) -> String {
+fn determine_ir_type(source: &FormatId, _target: &FormatId) -> String {
     let mime = &source.mime;
     if mime.starts_with("image/") {
         "Image".to_string()
