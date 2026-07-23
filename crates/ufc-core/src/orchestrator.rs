@@ -138,52 +138,53 @@ impl Orchestrator {
                 let target_format = item.target_format.clone();
 
                 // Take the item out of the queue for processing
-                let mut item = self.queue.get_mut(item_id).unwrap();
-                item.start();
+                {
+                    let mut item = self.queue.get_mut(item_id).unwrap();
+                    item.start();
+                }
 
                 // Process the conversion
                 let result = self.convert_single(&input_path, &output_path, &target_format).await;
 
-                let mut item = self.queue.get_mut(item_id).unwrap();
-                match result {
-                    Ok((bytes_written, checksum)) => {
-                        item.complete(bytes_written, checksum.clone());
-                        self.emit(OrchestratorEvent::Completed {
-                            item_id,
-                            bytes_written,
-                            checksum: checksum.clone(),
-                        });
-                        self.state.add_history(HistoryEntry {
-                            input_path,
-                            output_path,
-                            source_format: item.source_format.clone().unwrap_or_default(),
-                            target_format,
-                            success: true,
-                            bytes_written: Some(bytes_written),
-                            duration_ms: item.duration().map(|d| d.num_milliseconds() as u64),
-                            timestamp: chrono::Utc::now(),
-                            error: None,
-                        });
+                // Extract result data before touching self again
+                let (status, bytes_written, checksum, error_msg, source_format, duration_ms) = {
+                    let item = self.queue.get_mut(item_id).unwrap();
+                    let source_fmt = item.source_format.clone().unwrap_or_default();
+                    let dur = item.duration().map(|d| d.num_milliseconds() as u64);
+                    match &result {
+                        Ok((bw, cs)) => {
+                            item.complete(*bw, cs.clone());
+                            ("completed", Some(*bw), Some(cs.clone()), None, source_fmt, dur)
+                        }
+                        Err(e) => {
+                            let msg = e.to_string();
+                            item.fail(msg.clone());
+                            ("failed", None, None, Some(msg), source_fmt, dur)
+                        }
                     }
-                    Err(e) => {
-                        let error_msg = e.to_string();
-                        item.fail(error_msg.clone());
-                        self.emit(OrchestratorEvent::Failed {
-                            item_id,
-                            error: error_msg.clone(),
-                        });
-                        self.state.add_history(HistoryEntry {
-                            input_path,
-                            output_path,
-                            source_format: item.source_format.clone().unwrap_or_default(),
-                            target_format,
-                            success: false,
-                            bytes_written: None,
-                            duration_ms: item.duration().map(|d| d.num_milliseconds() as u64),
-                            timestamp: chrono::Utc::now(),
-                            error: Some(error_msg),
-                        });
-                    }
+                };
+
+                // Now emit events and save history (no longer borrowing self.queue)
+                if status == "completed" {
+                    self.emit(OrchestratorEvent::Completed {
+                        item_id,
+                        bytes_written: bytes_written.unwrap(),
+                        checksum: checksum.clone().unwrap(),
+                    });
+                    self.state.add_history(HistoryEntry {
+                        input_path, output_path, source_format: source_format.clone(), target_format,
+                        success: true, bytes_written, duration_ms, timestamp: chrono::Utc::now(), error: None,
+                    });
+                } else {
+                    self.emit(OrchestratorEvent::Failed {
+                        item_id,
+                        error: error_msg.clone().unwrap(),
+                    });
+                    self.state.add_history(HistoryEntry {
+                        input_path, output_path, source_format: source_format.clone(), target_format,
+                        success: false, bytes_written: None, duration_ms, timestamp: chrono::Utc::now(),
+                        error: error_msg,
+                    });
                 }
             } else {
                 break;

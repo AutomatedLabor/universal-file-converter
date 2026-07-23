@@ -67,7 +67,7 @@ semver = { version = "1", features = ["serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 
 # Error handling
-thiserror = "2"
+thiserror = "1"
 anyhow = "1"
 
 # Logging
