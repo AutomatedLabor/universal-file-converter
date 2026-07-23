@@ -13,7 +13,7 @@ ufc-plugin-api = { workspace = true }
 ufc-ir = { workspace = true }
 ufc-core = { workspace = true }
 ufc-host = { workspace = true }
-tauri = { version = "2", features = ["dialog", "shell-open"] }
+tauri = { version = "2", features = [] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tokio = { workspace = true }

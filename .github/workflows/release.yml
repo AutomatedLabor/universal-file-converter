@@ -15,12 +15,15 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             artifact: ufc-linux-x86_64
+            ext: ""
           - os: macos-latest
             target: aarch64-apple-darwin
             artifact: ufc-macos-arm64
+            ext: ""
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact: ufc-windows-x86_64.exe
+            artifact: ufc-windows-x86_64
+            ext: ".exe"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -29,11 +32,15 @@ jobs:
       - name: Build CLI
         run: cargo build --release -p ufc-cli
 
+      - name: Rename binary
+        run: cp target/release/ufc${{ matrix.ext }} ${{ matrix.artifact }}${{ matrix.ext }}
+        shell: bash
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: target/release/ufc${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+          path: ${{ matrix.artifact }}${{ matrix.ext }}
 
   release:
     name: Create Release
@@ -42,12 +49,20 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
 
+      - name: List artifacts
+        run: find artifacts -type f
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/**/*
           generate_release_notes: true
+          files: |
+            artifacts/ufc-linux-x86_64/ufc-linux-x86_64
+            artifacts/ufc-macos-arm64/ufc-macos-arm64
+            artifacts/ufc-windows-x86_64/ufc-windows-x86_64.exe
